@@ -30,6 +30,7 @@ export class UnitWalletService {
           status: 400,
         });
       }
+      
       return this.unit.accounts.create({
         type: 'depositAccount',
         attributes: {
