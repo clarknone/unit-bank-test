@@ -56,6 +56,9 @@ export class User {
   @Prop({ type: String })
   refreshToken: string;
 
+  @Prop({ type: String })
+  unitId: string;
+
   @Prop({ type: Date })
   last_attempt: Date;
 }
