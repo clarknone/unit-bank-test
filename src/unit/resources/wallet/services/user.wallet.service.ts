@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Address, Unit } from '@unit-finance/unit-node-sdk';
+import { Account, Address, Unit } from '@unit-finance/unit-node-sdk';
 import { Model } from 'mongoose';
 import { IAuthUser } from 'src/auth/interfaces/auth.interface';
 import { User, UserDocument } from 'src/auth/schema/auth.schema';
@@ -30,7 +30,7 @@ export class UnitWalletService {
           status: 400,
         });
       }
-      
+
       return this.unit.accounts.create({
         type: 'depositAccount',
         attributes: {
@@ -49,6 +49,12 @@ export class UnitWalletService {
         },
       });
     });
+  }
+
+  private createWallet(account: Account, wallet: WalletDocument) {
+    wallet.routingNumber = account.attributes.routingNumber;
+    wallet.accountNumber = account.attributes.accountNumber;
+    wallet.balance = account.attributes.balance;
   }
 
   getWallet() {
