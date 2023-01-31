@@ -31,11 +31,17 @@ export class Wallet {
   @Prop({ type: String, default: '' })
   routingNumber: string;
 
-  @Prop({ type: String, default: '' })
+  @Prop({ type: String, default: ''  })
   accountNumber: string;
+
+  @Prop({ type: String, default: '' })
+  type: string;
 
   @Prop({ type: Number, default: 0 })
   ledgerBalance: number;
+
+  @Prop({ type: String, default: 'Opem', enum: ['Open', 'Frozen', 'Closed'] })
+  status: string;
 }
 
 const WalletSchema = SchemaFactory.createForClass(Wallet);

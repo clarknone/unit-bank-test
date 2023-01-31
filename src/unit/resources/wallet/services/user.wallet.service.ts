@@ -1,6 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Account, Address, Unit } from '@unit-finance/unit-node-sdk';
+import {
+  Account,
+  Address,
+  DepositAccount,
+  Unit,
+} from '@unit-finance/unit-node-sdk';
 import { Model } from 'mongoose';
 import { IAuthUser } from 'src/auth/interfaces/auth.interface';
 import { User, UserDocument } from 'src/auth/schema/auth.schema';
@@ -31,23 +36,30 @@ export class UnitWalletService {
         });
       }
 
-      return this.unit.accounts.create({
-        type: 'depositAccount',
-        attributes: {
-          depositProduct: 'checking',
-          tags: {
-            uid: user.uuid,
-          },
-        },
-        relationships: {
-          customer: {
-            data: {
-              type: 'customer',
-              id: user.unitId,
+      return this.unit.accounts
+        .create({
+          type: 'depositAccount',
+          attributes: {
+            depositProduct: 'checking',
+            tags: {
+              uid: user.uuid,
             },
           },
-        },
-      });
+          relationships: {
+            customer: {
+              data: {
+                type: 'customer',
+                id: user.unitId,
+              },
+            },
+          },
+        })
+        .then((account) => {
+          return this.createWallet(
+            account.data,
+            new this.WalletModel({ user: user }),
+          );
+        });
     });
   }
 
@@ -55,10 +67,14 @@ export class UnitWalletService {
     wallet.routingNumber = account.attributes.routingNumber;
     wallet.accountNumber = account.attributes.accountNumber;
     wallet.balance = account.attributes.balance;
+    wallet.eid = account.id;
+    // wallet.status = account.attributes.status;
+    // wallet.type = account.attributes.depositProduct;
+    wallet.save();
   }
 
-  getWallet() {
-    return this.unit.applications.list();
+  async getWallet(authUser: IAuthUser) {
+    return this.WalletModel.findOne({ user: authUser.id });
     // return `This action returns all unit`;
   }
 }
