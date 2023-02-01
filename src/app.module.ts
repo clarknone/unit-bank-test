@@ -1,9 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { APP_FILTER } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
+import { WebhookExceptionFilter } from './helper/exceptions/filters/webhook.exception';
+import { WebhookService } from './unit/resources/webhook/webhook.service';
 import { UnitModule } from './unit/unit.module';
 
 @Module({
@@ -11,10 +14,12 @@ import { UnitModule } from './unit/unit.module';
     ConfigModule.forRoot({ isGlobal: true }),
     MongooseModule.forRoot(process.env.MONGO_URL),
     AuthModule,
-    UnitModule
-    
+    UnitModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    
+  ],
 })
 export class AppModule {}
