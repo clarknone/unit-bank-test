@@ -24,7 +24,7 @@ export class UnitWalletController {
   }
 
   @Get()
-  findAll() {
-    return this.unitService.getWallet();
+  findAll(@GetAuthUser() user: IAuthUser) {
+    return this.unitService.getWallet(user);
   }
 }
