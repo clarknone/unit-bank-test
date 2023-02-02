@@ -7,7 +7,6 @@ export type WebhookLogDocument = HydratedDocument<WebhookLog>;
 
 @Schema({ timestamps: true })
 export class WebhookLog {
-
   @Prop({ type: String })
   eid: string;
 
@@ -19,7 +18,9 @@ export class WebhookLog {
 
   @Prop({ type: String })
   data: string;
+
+  @Prop({ type: String, default: 'sucess', enum: ['failed', 'success'] })
+  status: string;
 }
 
-export const WebhookLogSchema =
-  SchemaFactory.createForClass(WebhookLog);
+export const WebhookLogSchema = SchemaFactory.createForClass(WebhookLog);

@@ -2,32 +2,29 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { IAuthUser } from 'src/auth/interfaces/auth.interface';
-import { User, UserDocument } from 'src/auth/schema/auth.schema';
 import { ServiceException } from 'src/helper/exceptions/exceptions/service.layer.exception';
 import { UnitProvider } from 'src/unit/config/unit.provider';
-import { CreateWalletTransferDto } from 'src/unit/dto/create-unit.dto';
-import { WalletTransferDocument } from '../entities/transfer.entity';
+import { CreateWalletWithdrawDto } from 'src/unit/dto/create-unit.dto';
 import { Wallet, WalletDocument } from '../entities/unit.entity';
-
-// const unit = new Unit(process.env.UNIT_API_KEY, 'https://api.s.unit.sh/');
-// console.log('token', process.env.UNIT_API_KEY);
+import {
+  WalletWithdraw,
+  WalletWithdrawDocument,
+} from '../entities/withdraw.entity';
 
 @Injectable()
-export class UnitWalletService {
+export class UnitWalletWithdrawService {
   constructor(
     private unit: UnitProvider,
-    @InjectModel(User.name)
-    private UserModel: Model<UserDocument>,
 
     @InjectModel(Wallet.name)
     private WalletModel: Model<WalletDocument>,
 
-    @InjectModel(Wallet.name)
-    private WalletTransferModel: Model<WalletTransferDocument>,
+    @InjectModel(WalletWithdraw.name)
+    private WalletWithdrawModel: Model<WalletWithdrawDocument>,
   ) {}
 
-  async walletTransfer(authUser: IAuthUser, data: CreateWalletTransferDto) {
-    return this.WalletModel.findById(data.sendWallet).then(async (userWallet) => {
+  async walletWithdraw(authUser: IAuthUser, data: CreateWalletWithdrawDto) {
+    return this.WalletModel.findById(data.wallet).then(async (userWallet) => {
       if (!userWallet || userWallet.status != 'Open') {
         throw new ServiceException({
           error: 'cannot perform transaction on wallet',
@@ -36,18 +33,21 @@ export class UnitWalletService {
       if (userWallet.balance < data.amount) {
         throw new ServiceException({ error: 'insufficent funds' });
       }
-      return this.getUserWallet(data.user).then((receiveWallet) => {
+      return this.getReservedWallet().then(async (receiveWallet) => {
         if (!receiveWallet) {
-          throw new ServiceException({ error: 'invalid receiver account' });
+          throw new ServiceException({
+            error:
+              'cannot withdraw at the moment, failed to get resolving account ',
+          });
         }
         return this.unit
           .bookTransfer(userWallet.eid, receiveWallet.eid, data.amount)
           .then((result) => {
-            return this.WalletTransferModel.create({
+            return this.WalletWithdrawModel.create({
               user: authUser.id,
-              sendWallet: userWallet._id,
+              wallet: userWallet._id,
               amount: result.data.attributes.amount,
-              receiveWallet: receiveWallet._id,
+              account: data.account,
               status: result.data.attributes.status,
               eid: result.data.id,
               txid: result.data.relationships?.transaction?.data?.id,
@@ -57,7 +57,7 @@ export class UnitWalletService {
     });
   }
 
-  private async getUserWallet(user: string): Promise<WalletDocument> {
-    return this.WalletModel.findOne({ user });
+  private async getReservedWallet(): Promise<WalletDocument> {
+    return this.WalletModel.findOne({ type: 'reserved' });
   }
 }

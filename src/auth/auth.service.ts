@@ -8,7 +8,7 @@ import {
   SignInDto,
   SignUpDto,
 } from './dto/create-auth.dto';
-import { IAuthUser } from "./interfaces/auth.interface";
+import { IAuthUser } from './interfaces/auth.interface';
 import { IErrorResponse } from './interfaces/response.interface';
 import { User, UserDocument } from './schema/auth.schema';
 import * as bcrypt from 'bcrypt';
@@ -48,7 +48,9 @@ export class AuthService {
           throw new ServiceException({ error: 'User not found' });
         }
         if (!(await bruteForceCheck(user))) {
-          throw new ServiceException({ error: 'Too many attempts, Try again in five minutes' });
+          throw new ServiceException({
+            error: 'Too many attempts, Try again in five minutes',
+          });
         }
 
         if (await bcrypt.compare(data.password, user.password)) {
@@ -68,7 +70,10 @@ export class AuthService {
       .then((user) => {
         console.log(user);
         if (!user) {
-          throw new ServiceException({ error: 'invalid refresh token', status: 401 });
+          throw new ServiceException({
+            error: 'invalid refresh token',
+            status: 401,
+          });
         }
         if (!user.isActive) {
           throw new ServiceException({ error: 'session expired', status: 401 });
@@ -84,9 +89,11 @@ export class AuthService {
   async resetPassword(data: ResetPasswordDto) {}
 
   async logout(authUser: IAuthUser): Promise<void> {
-    this.UserSchema.findByIdAndUpdate(authUser.id, { isActive: false }).catch((e) => {
-      throw new ServiceException({ error: parseDBError(e) });
-    });
+    this.UserSchema.findByIdAndUpdate(authUser.id, { isActive: false }).catch(
+      (e) => {
+        throw new ServiceException({ error: parseDBError(e) });
+      },
+    );
   }
 
   async signUser(user: UserDocument): Promise<IAuthUser> {
@@ -112,7 +119,7 @@ export class AuthService {
       token,
       refreshToken,
       email: user.email,
-      id: user._id.toString(),
+      id: user._id,
       type: user.type,
       fullName: user.fullname,
     };

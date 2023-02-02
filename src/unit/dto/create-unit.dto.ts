@@ -15,3 +15,18 @@ export class CreateWalletTransferDto {
   @IsNumber()
   amount: number;
 }
+
+export class CreateWalletWithdrawDto {
+
+  @IsNotEmpty()
+  @IsString()
+  wallet: string;
+
+  @IsNotEmpty()
+  @IsString()
+  account: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  amount: number;
+}
