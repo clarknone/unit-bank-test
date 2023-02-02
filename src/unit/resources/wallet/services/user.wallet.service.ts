@@ -28,7 +28,7 @@ export class UnitWalletService {
 
   async create(authUser: IAuthUser) {
     const user = await this.UserModel.findById(authUser.id);
-    return this.WalletModel.findOne({ user: authUser.id }).then((wallet) => {
+    return this.WalletModel.findOne({ user: user._id }).then((wallet) => {
       if (wallet) {
         throw new ServiceException({
           error: 'Wallet already exist',
@@ -56,25 +56,26 @@ export class UnitWalletService {
         })
         .then((account) => {
           return this.createWallet(
-            account.data,
+            account.data as DepositAccount,
             new this.WalletModel({ user: user }),
           );
         });
     });
   }
 
-  private createWallet(account: Account, wallet: WalletDocument) {
+  private createWallet(account: DepositAccount, wallet: WalletDocument) {
     wallet.routingNumber = account.attributes.routingNumber;
     wallet.accountNumber = account.attributes.accountNumber;
+    wallet.currency = account.attributes?.currency || '';
     wallet.balance = account.attributes.balance;
     wallet.eid = account.id;
-    // wallet.status = account.attributes.status;
-    // wallet.type = account.attributes.depositProduct;
+    wallet.status = account.attributes.status || '';
+    wallet.type = account.attributes.depositProduct || '';
     wallet.save();
+    return wallet;
   }
 
   async getWallet(authUser: IAuthUser) {
-    return this.WalletModel.findOne({ user: authUser.id });
-    // return `This action returns all unit`;
+    return this.WalletModel.find({ user: authUser.id });
   }
 }

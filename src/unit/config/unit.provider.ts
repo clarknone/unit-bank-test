@@ -19,6 +19,7 @@ export class UnitProvider extends Unit {
         counterpartyAccount: { data: { type: 'depositAccount', id: receiver } },
       },
     };
+    console.log({ receiver, sender });
     return this.payments.create(transfer);
   }
 }
