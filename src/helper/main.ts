@@ -12,9 +12,9 @@ export function calculateExchangeRate(from, to, amount) {
   return amount * er;
 }
 
-export function clearNullField(obj: { [index: string]: any }) {
+export function clearNullField<T>(obj: T) {
   const keys = Object.keys(obj);
-  const result = {};
+  const result = {} as T;
   if (keys.length >= 1) {
     keys.forEach((item) => {
       if (obj[item]) {

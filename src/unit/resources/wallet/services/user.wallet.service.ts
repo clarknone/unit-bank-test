@@ -1,16 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import {
-  Account,
-  Address,
-  DepositAccount,
-  Unit,
-} from '@unit-finance/unit-node-sdk';
+import { DepositAccount } from '@unit-finance/unit-node-sdk';
 import { Model } from 'mongoose';
 import { IAuthUser } from 'src/auth/interfaces/auth.interface';
 import { User, UserDocument } from 'src/auth/schema/auth.schema';
 import { ServiceException } from 'src/helper/exceptions/exceptions/service.layer.exception';
 import { UnitProvider } from 'src/unit/config/unit.provider';
+import { CreateAccountDto } from 'src/unit/dto/create-unit.dto';
+import { Account, AccountDocument } from '../entities/account.entity';
 import { Wallet, WalletDocument } from '../entities/unit.entity';
 
 // const unit = new Unit(process.env.UNIT_API_KEY, 'https://api.s.unit.sh/');
@@ -24,7 +21,18 @@ export class UnitWalletService {
     private UserModel: Model<UserDocument>,
     @InjectModel(Wallet.name)
     private WalletModel: Model<WalletDocument>,
+    @InjectModel(Account.name)
+    private AccountModel: Model<AccountDocument>,
   ) {}
+
+  async createAccount(user: IAuthUser, data: CreateAccountDto) {
+    const account = new this.AccountModel({ ...data, user: user.id });
+    return account.save();
+  }
+
+  async getUserAccounts(user: IAuthUser) {
+    return this.AccountModel.find({ user: user.id });
+  }
 
   async create(authUser: IAuthUser) {
     const user = await this.UserModel.findById(authUser.id);
@@ -63,6 +71,10 @@ export class UnitWalletService {
     });
   }
 
+  async getAllWallet() {
+    return this.WalletModel.find({});
+  }
+
   private createWallet(account: DepositAccount, wallet: WalletDocument) {
     wallet.routingNumber = account.attributes.routingNumber;
     wallet.accountNumber = account.attributes.accountNumber;
@@ -76,6 +88,6 @@ export class UnitWalletService {
   }
 
   async getWallet(authUser: IAuthUser) {
-    return this.WalletModel.find({ user: authUser.id });
+    return this.WalletModel.findOne({ user: authUser.id });
   }
 }

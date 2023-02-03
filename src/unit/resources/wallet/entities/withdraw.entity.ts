@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
 import { User } from 'src/auth/schema/auth.schema';
+import { Account } from './account.entity';
 import { Wallet } from './unit.entity';
 
 export type WalletWithdrawDocument = HydratedDocument<WalletWithdraw>;
@@ -13,9 +14,9 @@ export class WalletWithdraw {
   @Prop({ type: Types.ObjectId, ref: 'User' })
   user: User;
 
-  // @Prop({ type: Types.ObjectId, ref: 'Account', required: [true, 'Account must be specified'] })
-  @Prop({ type: String, required: [true, 'account is required '] })
-  account: string;
+  @Prop({ type: Types.ObjectId, ref: 'Account', required: [true, 'Account must be specified'] })
+  // @Prop({ type: String, required: [true, 'account is required '] })
+  account: Account;
 
   @Prop({
     type: Types.ObjectId,
@@ -36,7 +37,7 @@ export class WalletWithdraw {
   @Prop({
     type: String,
     default: 'pending',
-    enum: ['successful', 'pending', 'paid', 'failed', 'Sent', 'Rejected'],
+    enum: ['successful', 'pending', 'paid', 'failed', 'Sent',  'Cancled', 'Rejected'],
   })
   status: string;
 

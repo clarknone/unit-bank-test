@@ -4,7 +4,11 @@ import { Model } from 'mongoose';
 import { IAuthUser } from 'src/auth/interfaces/auth.interface';
 import { ServiceException } from 'src/helper/exceptions/exceptions/service.layer.exception';
 import { UnitProvider } from 'src/unit/config/unit.provider';
-import { CreateWalletWithdrawDto } from 'src/unit/dto/create-unit.dto';
+import {
+  CreateWalletWithdrawDto,
+  WalletApproveDto,
+  WalletFilterDto,
+} from 'src/unit/dto/create-unit.dto';
 import { Wallet, WalletDocument } from '../entities/unit.entity';
 import {
   WalletWithdraw,
@@ -54,6 +58,26 @@ export class UnitWalletWithdrawService {
             });
           });
       });
+    });
+  }
+
+  async getAllWithdraw(filter: WalletFilterDto) {
+    return this.WalletWithdrawModel.find({ ...filter }).populate([
+      { path: 'user', select: ['fullname', 'email'] },
+    ]);
+  }
+
+  async getAllUserWithdraw(user: IAuthUser, filter: WalletFilterDto) {
+    return this.WalletWithdrawModel.find({ ...filter, user: user.id }).populate(
+      [{ path: 'user', select: ['fullname', 'email'] }],
+    );
+  }
+
+  async approveWithdraw(user: IAuthUser, data: WalletApproveDto) {
+    // perform extra validation
+    return this.WalletWithdrawModel.findByIdAndUpdate(data.wallet, {
+      status: data.status,
+      agent: user.id,
     });
   }
 

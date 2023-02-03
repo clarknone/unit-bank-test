@@ -3,7 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from 'src/auth/schema/auth.schema';
 import { UnitProvider } from 'src/unit/config/unit.provider';
 import { UnitService } from 'src/unit/unit.service';
-import { UnitWalletController } from '../controllers/user.wallet.controller';
+import { UnitAdminWalletController } from '../controllers/admin.wallet.controller';
 import { Account, AccountSchema } from '../entities/account.entity';
 import {
   WalletTransfer,
@@ -28,7 +28,7 @@ import { UnitWalletWithdrawService } from '../services/withdraw.wallet.service';
       { name: Account.name, schema: AccountSchema },
     ]),
   ],
-  controllers: [UnitWalletController],
+  controllers: [UnitAdminWalletController],
   providers: [
     UnitProvider,
     UnitWalletService,
@@ -36,4 +36,4 @@ import { UnitWalletWithdrawService } from '../services/withdraw.wallet.service';
     UnitWalletWithdrawService,
   ],
 })
-export class WalletModule {}
+export class AdminWalletModule {}
