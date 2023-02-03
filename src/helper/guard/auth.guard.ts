@@ -4,6 +4,7 @@ import { TokenExpiredError } from 'jsonwebtoken';
 
 export class JwtAuthGuard extends AuthGuard('jwt') {
   handleRequest(err: any, user: any, info: any, context: any, status: any) {
+    console.log({ info });
     if (info instanceof TokenExpiredError) {
       throw new UnauthorizedException('expired token');
     } else if (info instanceof Error) {

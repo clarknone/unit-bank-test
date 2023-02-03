@@ -7,11 +7,13 @@ import { RouterModule } from '@nestjs/core';
 import { UnitRoutes } from './routes';
 import { WalletModule } from './resources/wallet/modules/user.wallet.module';
 import { WebhookModule } from './resources/webhook/webhook.module';
+import { AdminWalletModule } from './resources/wallet/modules/admin.wallet.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     WalletModule,
+    AdminWalletModule,
     WebhookModule,
     RouterModule.register(UnitRoutes),
   ],

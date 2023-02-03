@@ -1,6 +1,34 @@
-import { IsEmail, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateUnitDto {}
+
+export class WalletTransferFilterDto {
+  @IsOptional()
+  @IsString()
+  status: string;
+}
+
+export class WalletFilterDto {
+  @IsOptional()
+  @IsString()
+  status: string;
+}
+
+export class WalletApproveDto {
+  @IsNotEmpty()
+  @IsString()
+  wallet: string;
+
+  @IsNotEmpty()
+  @IsString()
+  status: 'paid' | 'failed' | 'Cancled' | 'Sent' | 'Rejected';
+}
 
 export class CreateWalletTransferDto {
   @IsOptional()
@@ -17,7 +45,6 @@ export class CreateWalletTransferDto {
 }
 
 export class CreateWalletWithdrawDto {
-
   @IsNotEmpty()
   @IsString()
   wallet: string;
@@ -29,4 +56,22 @@ export class CreateWalletWithdrawDto {
   @IsNotEmpty()
   @IsNumber()
   amount: number;
+}
+
+export class CreateAccountDto {
+  @IsNotEmpty()
+  @IsString()
+  currency: string;
+
+  @IsNotEmpty()
+  @IsString()
+  accountName: string;
+
+  @IsString()
+  @IsNotEmpty()
+  accountNo: string;
+
+  @IsNotEmpty()
+  @IsString()
+  bank: string;
 }

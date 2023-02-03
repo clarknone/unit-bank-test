@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
+import { UnauthorizedExceptionFilter } from './helper/exceptions/filters/permission.exception';
 import { ServiceExceptionFilter } from './helper/exceptions/filters/service.exception';
 import { WebhookExceptionFilter } from './helper/exceptions/filters/webhook.exception';
 import { WebhookService } from './unit/resources/webhook/webhook.service';
@@ -25,6 +26,7 @@ import { UnitModule } from './unit/unit.module';
   providers: [
     AppService,
     { provide: APP_FILTER, useClass: ServiceExceptionFilter },
+    { provide: APP_FILTER, useClass: UnauthorizedExceptionFilter },
   ],
 })
 export class AppModule {}

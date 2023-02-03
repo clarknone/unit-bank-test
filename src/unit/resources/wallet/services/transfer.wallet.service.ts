@@ -5,7 +5,7 @@ import { IAuthUser } from 'src/auth/interfaces/auth.interface';
 import { User, UserDocument } from 'src/auth/schema/auth.schema';
 import { ServiceException } from 'src/helper/exceptions/exceptions/service.layer.exception';
 import { UnitProvider } from 'src/unit/config/unit.provider';
-import { CreateWalletTransferDto } from 'src/unit/dto/create-unit.dto';
+import { CreateWalletTransferDto, WalletTransferFilterDto } from 'src/unit/dto/create-unit.dto';
 import {
   WalletTransferDocument,
   WalletTransfer,
@@ -60,6 +60,11 @@ export class UnitWalletTransferService {
         });
       },
     );
+  }
+
+
+  async getAllTransfer(filter:WalletTransferFilterDto){
+    return this.WalletTransferModel.findOne({...filter})
   }
 
   private async getUserWallet(user: string): Promise<WalletDocument> {
