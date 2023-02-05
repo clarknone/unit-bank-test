@@ -64,12 +64,22 @@ export class UnitWalletWithdrawService {
   async getAllWithdraw(filter: WalletFilterDto) {
     return this.WalletWithdrawModel.find({ ...filter }).populate([
       { path: 'user', select: ['fullname', 'email'] },
+      {
+        path: 'account',
+        select: ['bank', 'currency', 'accountName', 'accountNo', 'bank'],
+      },
     ]);
   }
 
   async getAllUserWithdraw(user: IAuthUser, filter: WalletFilterDto) {
     return this.WalletWithdrawModel.find({ ...filter, user: user.id }).populate(
-      [{ path: 'user', select: ['fullname', 'email'] }],
+      [
+        { path: 'user', select: ['fullname', 'email'] },
+        {
+          path: 'account',
+          select: ['bank', 'currency', 'accountName', 'accountNo', 'bank'],
+        },
+      ],
     );
   }
 

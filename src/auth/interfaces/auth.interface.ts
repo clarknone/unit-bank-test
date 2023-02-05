@@ -7,4 +7,5 @@ export interface IAuthUser {
   type: number;
   fullName?: string;
   id: Types.ObjectId;
+  isVerified:boolean,
 }

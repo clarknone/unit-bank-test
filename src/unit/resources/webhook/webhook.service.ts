@@ -25,8 +25,12 @@ export class WebhookService {
     private WalletModel: Model<WalletDocument>,
   ) {}
 
-  async customerCreated(item: EventDto, data: WebhookEventDto) {
-    const userUuid = item.attributes?.tags?.uuid;
+  async customerCreated(
+    item: EventDto,
+    data: WebhookEventDto,
+    service: WebhookService,
+  ) {
+    const userUuid = item.attributes?.tags?.uid;
     if (!userUuid) {
       throw new WebhookException({
         error: 'unkown user id',
@@ -34,11 +38,11 @@ export class WebhookService {
         data: data,
       });
     }
-    this.UserModel.findOneAndUpdate(
+    service.UserModel.findOneAndUpdate(
       { uuid: userUuid },
-      { unitId: item.attributes },
+      { unitId: item.relationships.customer.data.id },
     ).then((user) => {
-      this.createLog({ event: item, data });
+      service.createLog({ event: item, data });
     });
   }
 
