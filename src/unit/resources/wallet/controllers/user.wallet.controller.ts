@@ -16,12 +16,14 @@ import { UnitWalletService } from '../services/user.wallet.service';
 import { UnitWalletTransferService } from '../services/transfer.wallet.service';
 import {
   CreateAccountDto,
+  CreateApplicationDto,
   CreateWalletTransferDto,
   CreateWalletWithdrawDto,
   WalletFilterDto,
 } from 'src/unit/dto/create-unit.dto';
 import { UnitWalletWithdrawService } from '../services/withdraw.wallet.service';
 import { clearNullField } from 'src/helper/main';
+import { UnitApplicationService } from '../services/user.application.service';
 
 @UseGuards(JwtAuthGuard)
 @Controller()
@@ -30,6 +32,7 @@ export class UnitWalletController {
     private readonly unitWalletService: UnitWalletService,
     private readonly walletTransferService: UnitWalletTransferService,
     private readonly walletWithdrawService: UnitWalletWithdrawService,
+    private readonly applicationService: UnitApplicationService,
   ) {}
 
   @Post()
@@ -69,6 +72,14 @@ export class UnitWalletController {
     @Body() data: CreateAccountDto,
   ) {
     return this.unitWalletService.createAccount(user, data);
+  }
+
+  @Post('application')
+  createApplication(
+    @GetAuthUser() user: IAuthUser,
+    @Body() data: CreateApplicationDto,
+  ) {
+    return this.applicationService.createApplication(user, data);
   }
 
   @Get('account')

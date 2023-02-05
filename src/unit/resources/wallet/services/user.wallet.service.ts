@@ -1,12 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { DepositAccount } from '@unit-finance/unit-node-sdk';
+import { Address, DepositAccount } from '@unit-finance/unit-node-sdk';
 import { Model } from 'mongoose';
 import { IAuthUser } from 'src/auth/interfaces/auth.interface';
 import { User, UserDocument } from 'src/auth/schema/auth.schema';
 import { ServiceException } from 'src/helper/exceptions/exceptions/service.layer.exception';
 import { UnitProvider } from 'src/unit/config/unit.provider';
-import { CreateAccountDto } from 'src/unit/dto/create-unit.dto';
+import {
+  CreateAccountDto,
+  CreateApplicationDto,
+} from 'src/unit/dto/create-unit.dto';
 import { Account, AccountDocument } from '../entities/account.entity';
 import { Wallet, WalletDocument } from '../entities/unit.entity';
 
@@ -67,6 +70,44 @@ export class UnitWalletService {
             account.data as DepositAccount,
             new this.WalletModel({ user: user }),
           );
+        });
+    });
+  }
+
+  async createApplication(authUser: IAuthUser, data: CreateApplicationDto) {
+    if (authUser.isVerified) {
+      throw new ServiceException({ error: 'cannot have two applications' });
+    }
+    return this.UserModel.findById(authUser.id).then(async (user) => {
+      const address: Address = {
+        street: data.address.street,
+        city: data.address.city,
+        state: data.address.state,
+        country: data.address.country,
+        postalCode: data.address.postalCode,
+      };
+      const [first, last] = user.fullname.split(' ');
+      return this.unit.applications
+        .create({
+          type: 'individualApplication',
+          attributes: {
+            tags: {
+              uid: user.uuid,
+            },
+            passport: data.passport,
+            nationality: address.country,
+            address: address,
+            fullName: { first, last },
+            dateOfBirth: data.dateOfBirth,
+            email: user.email,
+            phone: { countryCode: '234', number: user.phone },
+          },
+        })
+        .catch((e) => {
+          throw new ServiceException({
+            error: e.message,
+            status: 400,
+          });
         });
     });
   }

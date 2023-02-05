@@ -65,6 +65,19 @@ export class AuthService {
       });
   }
 
+  async profile(data: IAuthUser): Promise<IAuthUser> {
+    return this.UserSchema.findOne({ email: data.email })
+      .then(async (user) => {
+        if (!user) {
+          throw new ServiceException({ error: 'User not found' });
+        }
+        return this.signUser(user);
+      })
+      .catch((e) => {
+        throw new ServiceException({ error: parseDBError(e) });
+      });
+  }
+
   async refreshToken(data: RefreshTokenDto): Promise<IAuthUser> {
     return this.UserSchema.findOne({ refreshToken: data.refreshToken })
       .then((user) => {
@@ -96,7 +109,7 @@ export class AuthService {
     );
   }
 
-  async signUser(user: UserDocument): Promise<IAuthUser> {
+  async signUser(user: UserDocument, save = true): Promise<IAuthUser> {
     const token: string = this.jwtService.sign(
       {
         email: user.email,
@@ -120,12 +133,13 @@ export class AuthService {
       refreshToken,
       email: user.email,
       id: user._id,
+      isVerified: !!user.unitId,
       type: user.type,
       fullName: user.fullname,
     };
     user.refreshToken = refreshToken;
     user.isActive = true;
-    await user.save();
+    save && (await user.save());
 
     return authUser;
   }

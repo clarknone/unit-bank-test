@@ -5,6 +5,7 @@ import { UnitProvider } from 'src/unit/config/unit.provider';
 import { UnitService } from 'src/unit/unit.service';
 import { UnitWalletController } from '../controllers/user.wallet.controller';
 import { Account, AccountSchema } from '../entities/account.entity';
+import { Application, ApplicationSchema } from '../entities/application.entity';
 import {
   WalletTransfer,
   WalletTransferSchema,
@@ -15,6 +16,7 @@ import {
   WalletWithdrawSchema,
 } from '../entities/withdraw.entity';
 import { UnitWalletTransferService } from '../services/transfer.wallet.service';
+import { UnitApplicationService } from '../services/user.application.service';
 import { UnitWalletService } from '../services/user.wallet.service';
 import { UnitWalletWithdrawService } from '../services/withdraw.wallet.service';
 
@@ -23,6 +25,7 @@ import { UnitWalletWithdrawService } from '../services/withdraw.wallet.service';
     MongooseModule.forFeature([
       { name: User.name, schema: UserSchema },
       { name: WalletTransfer.name, schema: WalletTransferSchema },
+      { name: Application.name, schema: ApplicationSchema },
       { name: WalletWithdraw.name, schema: WalletWithdrawSchema },
       { name: Wallet.name, schema: WalletSchema },
       { name: Account.name, schema: AccountSchema },
@@ -32,6 +35,7 @@ import { UnitWalletWithdrawService } from '../services/withdraw.wallet.service';
   providers: [
     UnitProvider,
     UnitWalletService,
+    UnitApplicationService,
     UnitWalletTransferService,
     UnitWalletWithdrawService,
   ],

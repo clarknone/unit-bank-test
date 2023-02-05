@@ -1,20 +1,6 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { WebhookService } from './webhook.service';
-import {
-  CreateWebhookDto,
-  EventDto,
-  WebhookEventDto,
-} from './dto/create-webhook.dto';
-import { UpdateWebhookDto } from './dto/update-webhook.dto';
-import { IWebhookEvent } from './interfaces/receive.interface';
+import { EventDto, WebhookEventDto } from './dto/create-webhook.dto';
 
 @Controller()
 export class WebhookController {
@@ -32,8 +18,9 @@ export class WebhookController {
   }
 
   @Post()
-  async create(@Body() data: WebhookEventDto) {
+  async create(@Body() data) {
     const eventHandlers = [];
+    console.log({ data });
     data?.data?.forEach((item) => {
       if (this.handlers[item.type]) {
         eventHandlers.push(
