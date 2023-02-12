@@ -16,7 +16,7 @@ export class Auth0Strategy extends PassportStrategy(Strategy, 'jwt-auth') {
       }),
 
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      aud: 'http://localhost:8000',
+      // aud: 'http://localhost:8000',
       // issuer: `${process.env.AUTH_DOMAIN}`,
       algorithms: ['RS256'],
     });
