@@ -1,4 +1,11 @@
-import { Controller, Post, Body, BadRequestException, UseGuards, Get } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  BadRequestException,
+  UseGuards,
+  Get,
+} from '@nestjs/common';
 import { isInstance } from 'class-validator';
 import { AuthService } from './auth.service';
 import { GetAuthUser } from './decorators/user.decorators';
@@ -26,7 +33,7 @@ export class AuthController {
   async login(@Body() data: SignInDto): Promise<IAuthUser> {
     return this.authService.signin(data);
   }
-  
+
   @UseGuards(JwtAuthGuard)
   @Post('logout')
   logout(@GetAuthUser() user: IAuthUser) {
@@ -35,7 +42,13 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Get('profile')
-  profile(@GetAuthUser() user: IAuthUser):Promise<IAuthUser> {
+  profile(@GetAuthUser() user: IAuthUser): Promise<IAuthUser> {
+    return this.authService.profile(user);
+  }
+  
+  @UseGuards(JwtAuthGuard)
+  @Get('test')
+  testAuth0(@GetAuthUser() user: IAuthUser): Promise<IAuthUser> {
     return this.authService.profile(user);
   }
 
