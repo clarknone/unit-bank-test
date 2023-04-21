@@ -1,4 +1,4 @@
-import { IErrorResponse } from 'src/auth/interfaces/response.interface';
+import { IErrorResponse } from "../../../auth/interfaces/response.interface";
 
 export class ServiceException extends Error {
   public code: number = 400;

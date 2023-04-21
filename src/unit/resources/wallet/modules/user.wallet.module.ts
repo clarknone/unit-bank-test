@@ -1,8 +1,5 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { User, UserSchema } from 'src/auth/schema/auth.schema';
-import { UnitProvider } from 'src/unit/config/unit.provider';
-import { UnitService } from 'src/unit/unit.service';
 import { UnitWalletController } from '../controllers/user.wallet.controller';
 import { Account, AccountSchema } from '../entities/account.entity';
 import { Application, ApplicationSchema } from '../entities/application.entity';
@@ -19,6 +16,8 @@ import { UnitWalletTransferService } from '../services/transfer.wallet.service';
 import { UnitApplicationService } from '../services/user.application.service';
 import { UnitWalletService } from '../services/user.wallet.service';
 import { UnitWalletWithdrawService } from '../services/withdraw.wallet.service';
+import { User, UserSchema } from '../../../../auth/schema/auth.schema';
+import { UnitProvider } from '../../../config/unit.provider';
 
 @Module({
   imports: [

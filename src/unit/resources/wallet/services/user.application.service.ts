@@ -2,10 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Address, DepositAccount } from '@unit-finance/unit-node-sdk';
 import { Model } from 'mongoose';
-import { IAuthUser } from 'src/auth/interfaces/auth.interface';
-import { User, UserDocument } from 'src/auth/schema/auth.schema';
-import { ServiceException } from 'src/helper/exceptions/exceptions/service.layer.exception';
-import { UnitProvider } from 'src/unit/config/unit.provider';
 import {
   ApplicationApproveDto,
   CreateApplicationDto,
@@ -15,6 +11,10 @@ import {
   Application,
   ApplicationDocument,
 } from '../entities/application.entity';
+import { UnitProvider } from '../../../config/unit.provider';
+import { User, UserDocument } from '../../../../auth/schema/auth.schema';
+import { IAuthUser } from '../../../../auth/interfaces/auth.interface';
+import { ServiceException } from '../../../../helper/exceptions/exceptions/service.layer.exception';
 
 // const unit = new Unit(process.env.UNIT_API_KEY, 'https://api.s.unit.sh/');
 // console.log('token', process.env.UNIT_API_KEY);

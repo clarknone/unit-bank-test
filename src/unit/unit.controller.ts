@@ -13,11 +13,10 @@ import { CreateUnitDto } from './dto/create-unit.dto';
 import { UpdateUnitDto } from './dto/update-unit.dto';
 import { JwtAuthGuard } from 'src/helper/guard/auth.guard';
 import { IAuthGuard } from '@nestjs/passport';
-import { IAuthUser } from 'src/auth/interfaces/auth.interface';
 import { InjectModel } from '@nestjs/mongoose';
-import { User, UserDocument } from 'src/auth/schema/auth.schema';
 import { Model } from 'mongoose';
-import { GetAuthUser } from 'src/auth/decorators/user.decorators';
+import { IAuthUser } from '../auth/interfaces/auth.interface';
+import { GetAuthUser } from '../auth/decorators/user.decorators';
 
 @UseGuards(JwtAuthGuard)
 @Controller('unit')

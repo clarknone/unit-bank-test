@@ -1,9 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { User, UserDocument } from 'src/auth/schema/auth.schema';
-import { WebhookException } from 'src/helper/exceptions/exceptions/webhook.layer.exception';
-import { UnitProvider } from 'src/unit/config/unit.provider';
 import { Wallet, WalletDocument } from '../wallet/entities/unit.entity';
 import {
   CreateEventLogDto,
@@ -13,6 +10,8 @@ import {
 } from './dto/create-webhook.dto';
 import { UpdateWebhookDto } from './dto/update-webhook.dto';
 import { WebhookLog, WebhookLogDocument } from './entities/webhook.entity';
+import { User, UserDocument } from '../../../auth/schema/auth.schema';
+import { WebhookException } from '../../../helper/exceptions/exceptions/webhook.layer.exception';
 
 @Injectable()
 export class WebhookService {

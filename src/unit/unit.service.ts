@@ -2,11 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Address, Unit } from '@unit-finance/unit-node-sdk';
 import { Model } from 'mongoose';
-import { IAuthUser } from 'src/auth/interfaces/auth.interface';
-import { User, UserDocument } from 'src/auth/schema/auth.schema';
 import { UnitProvider } from './config/unit.provider';
 import { CreateApplicationDto, CreateUnitDto } from './dto/create-unit.dto';
 import { UpdateUnitDto } from './dto/update-unit.dto';
+import { User, UserDocument } from '../auth/schema/auth.schema';
+import { IAuthUser } from '../auth/interfaces/auth.interface';
 
 // const unit = new Unit(process.env.UNIT_API_KEY, 'https://api.s.unit.sh/');
 // console.log('token', process.env.UNIT_API_KEY);

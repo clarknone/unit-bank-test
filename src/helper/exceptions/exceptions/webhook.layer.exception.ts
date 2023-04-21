@@ -1,7 +1,5 @@
-import {
-  IErrorResponse,
-  IWebHookError,
-} from 'src/auth/interfaces/response.interface';
+import { IWebHookError } from "../../../auth/interfaces/response.interface";
+
 
 export class WebhookException extends Error {
   public data: IWebHookError;
