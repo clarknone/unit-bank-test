@@ -1,7 +1,7 @@
 import { ExecutionContext } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Observable } from 'rxjs';
-import { IAuthUser } from 'src/auth/interfaces/auth.interface';
+import { IAuthUser } from '../../auth/interfaces/auth.interface';
 
 export class JwtAdminGuard extends AuthGuard('jwt') {
   canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {

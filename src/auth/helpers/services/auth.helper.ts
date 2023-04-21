@@ -1,4 +1,4 @@
-import { UserDocument } from 'src/auth/schema/auth.schema';
+import { UserDocument } from "../../schema/auth.schema";
 
 export async function bruteForceCheck(user: UserDocument): Promise<boolean> {
   let result = false;
@@ -6,7 +6,9 @@ export async function bruteForceCheck(user: UserDocument): Promise<boolean> {
   if (user.attempt < maxTime) {
     result = true;
   } else {
-    const timeDiff = new Date().getMilliseconds() - (user.last_attempt?.getMilliseconds() || 0);
+    const timeDiff =
+      new Date().getMilliseconds() -
+      (user.last_attempt?.getMilliseconds() || 0);
     const minutesPassed = Math.floor(timeDiff / 1000 / 60);
     if (minutesPassed >= maxTime) {
       result = true;

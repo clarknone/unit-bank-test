@@ -1,8 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
-import { User } from 'src/auth/schema/auth.schema';
 import { Account } from './account.entity';
 import { Wallet } from './unit.entity';
+import { User } from '../../../../auth/schema/auth.schema';
 
 export type WalletWithdrawDocument = HydratedDocument<WalletWithdraw>;
 

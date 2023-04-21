@@ -10,8 +10,6 @@ import {
   Query,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/helper/guard/auth.guard';
-import { IAuthUser } from 'src/auth/interfaces/auth.interface';
-import { GetAuthUser } from 'src/auth/decorators/user.decorators';
 import { UnitWalletService } from '../services/user.wallet.service';
 import { UnitWalletTransferService } from '../services/transfer.wallet.service';
 import {
@@ -23,8 +21,11 @@ import {
   ApplicationApproveDto,
 } from 'src/unit/dto/create-unit.dto';
 import { UnitWalletWithdrawService } from '../services/withdraw.wallet.service';
-import { clearNullField } from 'src/helper/main';
+// import { clearNullField } from 'src/helper/main';
 import { UnitApplicationService } from '../services/user.application.service';
+import { IAuthUser } from '../../../../auth/interfaces/auth.interface';
+import { GetAuthUser } from '../../../../auth/decorators/user.decorators';
+import { clearNullField } from '../../../../helper/main';
 
 @UseGuards(JwtAuthGuard)
 @Controller()

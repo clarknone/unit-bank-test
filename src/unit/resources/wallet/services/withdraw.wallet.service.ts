@@ -1,9 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { IAuthUser } from 'src/auth/interfaces/auth.interface';
-import { ServiceException } from 'src/helper/exceptions/exceptions/service.layer.exception';
-import { UnitProvider } from 'src/unit/config/unit.provider';
 import {
   CreateWalletWithdrawDto,
   WalletApproveDto,
@@ -14,6 +11,9 @@ import {
   WalletWithdraw,
   WalletWithdrawDocument,
 } from '../entities/withdraw.entity';
+import { UnitProvider } from '../../../config/unit.provider';
+import { IAuthUser } from '../../../../auth/interfaces/auth.interface';
+import { ServiceException } from '../../../../helper/exceptions/exceptions/service.layer.exception';
 
 @Injectable()
 export class UnitWalletWithdrawService {
