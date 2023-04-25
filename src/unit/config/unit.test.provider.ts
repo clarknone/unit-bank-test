@@ -1,12 +1,10 @@
 import { CreateBookPaymentRequest, Unit } from '@unit-finance/unit-node-sdk';
+import { ApplicationMock } from './mock/application.mock';
 
 // new Unit().payments
 
-export class UnitProvider extends Unit {
-  constructor() {
-    super(process.env.UNIT_API_KEY, 'https://api.s.unit.sh/');
-  }
-
+export class UnitTestProvider extends Unit {
+  applications: ApplicationMock = new ApplicationMock('tokne', 'pthe');
   async bookTransfer(sender: string, receiver: string, amount: number) {
     const transfer: CreateBookPaymentRequest = {
       type: 'bookPayment',
@@ -23,7 +21,7 @@ export class UnitProvider extends Unit {
     return this.payments.create(transfer);
   }
 
-  getTest(): string {
-    return 'Live';
+  getTest():string {
+    return "Test"
   }
 }
