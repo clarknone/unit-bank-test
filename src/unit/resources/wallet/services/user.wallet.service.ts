@@ -131,4 +131,9 @@ export class UnitWalletService {
   async getWallet(authUser: IAuthUser) {
     return this.WalletModel.findOne({ user: authUser.id });
   }
+
+  getUnitTest(){
+    console.log("text", this.unit.getTest)
+    return this.unit.getTest()
+  }
 }
