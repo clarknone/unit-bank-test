@@ -133,7 +133,6 @@ export class UnitWalletService {
   }
 
   getUnitTest(){
-    console.log("text", this.unit.getTest)
     return this.unit.getTest()
   }
 }

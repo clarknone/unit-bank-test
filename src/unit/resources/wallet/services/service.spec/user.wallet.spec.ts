@@ -47,7 +47,7 @@ describe('UnitWalletService', () => {
       providers: [
         {
           provide: UnitProvider,
-          useValue: { get: () => new UnitTestProvider('tokne', 'dsfd') },
+          useValue: new UnitTestProvider('tokne', 'dsfd') ,
         },
         UnitWalletService,
         UnitApplicationService,
