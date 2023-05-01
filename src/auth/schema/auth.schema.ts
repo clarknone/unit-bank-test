@@ -32,7 +32,7 @@ export class User {
   })
   phone: string;
 
-  @Prop({ type: String, required: [true, 'Password is required'] })
+  @Prop({ type: String })
   password: string;
 
   @Prop({ type: String })

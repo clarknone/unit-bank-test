@@ -26,11 +26,12 @@ import {
 } from '../../../../../helper/test/connection';
 import { disconnect } from 'mongoose';
 import { UnitTestProvider } from '../../../../config/unit.test.provider';
+import { UserSeederService } from '../../../../../helper/test/seeder';
 
 describe('UnitWalletService', () => {
   let service: UnitWalletService;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     // const mockUser
     const module: TestingModule = await Test.createTestingModule({
       imports: [
@@ -47,8 +48,9 @@ describe('UnitWalletService', () => {
       providers: [
         {
           provide: UnitProvider,
-          useValue: new UnitTestProvider('tokne', 'dsfd') ,
+          useValue: new UnitTestProvider('tokne', 'dsfd'),
         },
+        UserSeederService,
         UnitWalletService,
         UnitApplicationService,
         UnitWalletTransferService,
@@ -56,12 +58,20 @@ describe('UnitWalletService', () => {
       ],
     }).compile();
 
+    const seader = module.get<UserSeederService>(UserSeederService);
+    await seader.seed();
     service = module.get<UnitWalletService>(UnitWalletService);
   });
 
   it('should be defined', async () => {
     const wallets = service.getUnitTest();
     expect(wallets).toBe('Test');
+  });
+
+  it('user created', async () => {
+    const users = await service.getUser();
+    console.log({wallets: users})
+    expect(users).toHaveLength(1);
   });
 
   afterAll(async () => {
