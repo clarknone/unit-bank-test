@@ -132,15 +132,6 @@ export class UnitWalletService {
     return this.WalletModel.findOne({ user: authUser.id });
   }
 
-  async getUser(){
-    return this.UserModel.find().then((data)=>{
-      console.log({data})
-      return data
-    }).catch(e=>{
-      throw new ServiceException({ error: 'cannot fetch users' });
-    })
-  }
-
   getUnitTest(){
     return this.unit.getTest()
   }
