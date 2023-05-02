@@ -27,12 +27,14 @@ import {
 import { disconnect } from 'mongoose';
 import { UnitTestProvider } from '../../../../config/unit.test.provider';
 import { UserSeederService } from '../../../../../helper/test/seeder';
+import { IAuthUser } from '../../../../../auth/interfaces/auth.interface';
+import { CreateAccountDto } from '../../../../dto/create-unit.dto';
 
-describe('UnitWalletService', () => {
+describe('Unit Wallet Service Test', () => {
   let service: UnitWalletService;
+  let testUser: IAuthUser;
 
   beforeAll(async () => {
-    // const mockUser
     const module: TestingModule = await Test.createTestingModule({
       imports: [
         rootMongooseTestModule(),
@@ -60,18 +62,29 @@ describe('UnitWalletService', () => {
 
     const seader = module.get<UserSeederService>(UserSeederService);
     await seader.seed();
+    testUser = await seader.getAuthUser();
     service = module.get<UnitWalletService>(UnitWalletService);
   });
 
-  it('should be defined', async () => {
-    const wallets = service.getUnitTest();
-    expect(wallets).toBe('Test');
+  it('should create an account', async () => {
+    const accountData: CreateAccountDto = {
+      currency: 'NGN',
+      accountName: 'Fane Me',
+      accountNo: '01929323',
+      bank: 'First Bank',
+    };
+    const account = await service.createAccount(testUser, accountData);
+    expect(account).toBeDefined();
   });
 
-  it('user created', async () => {
-    const users = await service.getUser();
-    console.log({wallets: users})
-    expect(users).toHaveLength(1);
+  it('should get created account', async () => {
+    const accounts = await service.getUserAccounts(testUser);
+    expect(accounts).toHaveLength(1);
+  });
+
+  it('should get user wallet', async () => {
+    const wallets = await service.getWallet(testUser);
+    expect(wallets).toBeDefined();
   });
 
   afterAll(async () => {
